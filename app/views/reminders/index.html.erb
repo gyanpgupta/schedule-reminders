@@ -24,7 +24,7 @@
         <tr>
           <td><%= reminder.title %></td>
           <td><%= reminder.description %></td>
-          <td><%= reminder.day %></td>
+          <td><%= day_of_month(reminder.month_schedule_day) %></td>
           <td><%= reminder.time.strftime("%H:%M %p") %></td>
           <td>
             <%= link_to 'View', reminder_path(reminder), class: 'btn btn-success' %>
