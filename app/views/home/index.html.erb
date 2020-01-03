@@ -8,13 +8,9 @@
       <p>Welcome to Schedule Reminders.</p>
       <p>Here you can create schedules and send reminders of the same to specified users.</p>
       <% if user_signed_in? %>
-        <div class="col-md-8 text-center">
-          <%= link_to 'Schedules', "javascript:void(0);", class: 'btn btn-info btn-width' %>
-        </div>
+        <%= link_to 'Reminders', reminders_path, class: 'btn btn-info pull-left' %>
       <% else %>
-        <div class="col-md-8 text-center">
-          <%= link_to 'Signup', new_user_registration_path, class: 'btn btn-info btn-width' %>
-        </div>
+        <%= link_to 'Signup', new_user_registration_path, class: 'btn btn-info pull-left' %>
       <% end %>
     </div>
   </div>
