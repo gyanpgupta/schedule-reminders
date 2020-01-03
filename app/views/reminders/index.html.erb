@@ -1,0 +1,38 @@
+<div class="page-header">
+  <h2>Reminders</h2>
+  <%= link_to 'Create Reminder', new_reminder_path, class: 'btn btn-primary pull-right' %>
+</div>
+
+<% if @reminders.blank? %>
+  <div>
+    <h3> No reminder created yet!!!!</h3>
+  </div>
+<% else %>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Description</th>
+        <th scope="col">Day</th>
+        <th scope="col">Time</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody style="background-color: #eeeeee;">
+      <% @reminders.each do |reminder| %>
+        <tr>
+          <td><%= reminder.title %></td>
+          <td><%= reminder.description %></td>
+          <td><%= reminder.day %></td>
+          <td><%= reminder.time.strftime("%H:%M %p") %></td>
+          <td>
+            <%= link_to 'View', reminder_path(reminder), class: 'btn btn-success' %>
+            <%= link_to 'Edit', edit_reminder_path(reminder), class: 'btn btn-primary' %>
+            <%= link_to 'Remove', reminder_path(reminder), remote: true, class: 'btn btn-danger delete_group', method: :delete, data: {confirm: 'Are you sure?'} %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
