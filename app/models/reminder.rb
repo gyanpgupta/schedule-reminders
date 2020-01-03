@@ -24,9 +24,9 @@ class Reminder < ApplicationRecord
 
   def scheduled?
     t = time
-    d = month_schedule_day
-    new_time = DateTime.new(d.year, d.month, d.day, t.hour, t.min)
-    DateTime.now > (new_time - 30.min) && DateTime.now < new_time
+    d = month_schedule_date
+    new_time = Time.new(d.year, d.month, d.day, t.hour, t.min)
+    Time.now > (new_time - 30.minutes) && Time.now < new_time
   end
 
   def month_schedule_day
