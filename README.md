@@ -9,6 +9,8 @@ Things you may want to cover:
 
 * Rails version 5.2.0
 
+* Create application.yml file inside config folder like sample_application.yml
+
 * Database : Postgres
 
 * Database creation :
