@@ -24,118 +24,115 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe RemindersController, type: :controller do
-
   # This should return the minimal set of attributes required to create a valid
   # Reminder. As you add validations to Reminder, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  login_user
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:valid_attributes) do
+    attributes_for(:reminder).merge(user_id: current_user.id)
+  end
+
+  let(:invalid_attributes) { attributes_for(:reminder, time: nil) }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # RemindersController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "returns a success response" do
+  describe 'GET #index' do
+    it 'returns a success response' do
       Reminder.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
     end
   end
 
-  describe "GET #show" do
-    it "returns a success response" do
+  describe 'GET #show' do
+    it 'returns a success response' do
       reminder = Reminder.create! valid_attributes
-      get :show, params: {id: reminder.to_param}, session: valid_session
+      get :show, params: { id: reminder.to_param }, session: valid_session
       expect(response).to be_successful
     end
   end
 
-  describe "GET #new" do
-    it "returns a success response" do
+  describe 'GET #new' do
+    it 'returns a success response' do
       get :new, params: {}, session: valid_session
       expect(response).to be_successful
     end
   end
 
-  describe "GET #edit" do
-    it "returns a success response" do
+  describe 'GET #edit' do
+    it 'returns a success response' do
       reminder = Reminder.create! valid_attributes
-      get :edit, params: {id: reminder.to_param}, session: valid_session
+      get :edit, params: { id: reminder.to_param }, session: valid_session
       expect(response).to be_successful
     end
   end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Reminder" do
-        expect {
-          post :create, params: {reminder: valid_attributes}, session: valid_session
-        }.to change(Reminder, :count).by(1)
+  describe 'POST #create' do
+    context 'with valid params' do
+      it 'creates a new Reminder' do
+        expect do
+          post :create, params: { reminder: valid_attributes }, session: valid_session
+        end.to change(Reminder, :count).by(1)
       end
 
-      it "redirects to the created reminder" do
-        post :create, params: {reminder: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(Reminder.last)
+      it 'redirects to the created reminder' do
+        post :create, params: { reminder: valid_attributes }, session: valid_session
+        expect(response).to redirect_to(reminders_url)
       end
     end
 
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {reminder: invalid_attributes}, session: valid_session
+    context 'with invalid params' do
+      it 'returns a success response (i.e. to display the new template)' do
+        post :create, params: { reminder: invalid_attributes }, session: valid_session
         expect(response).to be_successful
       end
     end
   end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+  describe 'PUT #update' do
+    context 'with valid params' do
+      let(:new_attributes) { { title: 'title', description: 'description' } }
 
-      it "updates the requested reminder" do
+      it 'updates the requested reminder' do
         reminder = Reminder.create! valid_attributes
-        put :update, params: {id: reminder.to_param, reminder: new_attributes}, session: valid_session
+        put :update, params: { id: reminder.to_param, reminder: new_attributes }, session: valid_session
         reminder.reload
-        skip("Add assertions for updated state")
+        expect(reminder.title).to eq new_attributes[:title]
+        expect(reminder.description).to eq new_attributes[:description]
       end
 
-      it "redirects to the reminder" do
+      it 'redirects to the reminder' do
         reminder = Reminder.create! valid_attributes
-        put :update, params: {id: reminder.to_param, reminder: valid_attributes}, session: valid_session
+        put :update, params: { id: reminder.to_param, reminder: valid_attributes }, session: valid_session
         expect(response).to redirect_to(reminder)
       end
     end
 
-    context "with invalid params" do
-      it "returns a success response (i.e. to display the 'edit' template)" do
+    context 'with invalid params' do
+      it 'returns a success response (i.e. to display the edit template)' do
         reminder = Reminder.create! valid_attributes
-        put :update, params: {id: reminder.to_param, reminder: invalid_attributes}, session: valid_session
+        put :update, params: { id: reminder.to_param, reminder: invalid_attributes }, session: valid_session
         expect(response).to be_successful
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested reminder" do
+  describe 'DELETE #destroy' do
+    it 'destroys the requested reminder' do
       reminder = Reminder.create! valid_attributes
-      expect {
-        delete :destroy, params: {id: reminder.to_param}, session: valid_session
-      }.to change(Reminder, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: reminder.to_param }, session: valid_session
+      end.to change(Reminder, :count).by(-1)
     end
 
-    it "redirects to the reminders list" do
+    it 'redirects to the reminders list' do
       reminder = Reminder.create! valid_attributes
-      delete :destroy, params: {id: reminder.to_param}, session: valid_session
+      delete :destroy, params: { id: reminder.to_param }, session: valid_session
       expect(response).to redirect_to(reminders_url)
     end
   end
-
 end
