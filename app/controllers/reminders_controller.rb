@@ -5,15 +5,13 @@ class RemindersController < ApplicationController
     @reminders = current_user.reminders
   end
 
-  def show
-  end
+  def show; end
 
   def new
     @reminder = current_user.reminders.new
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @reminder = current_user.reminders.build(reminder_params)
@@ -51,11 +49,12 @@ class RemindersController < ApplicationController
   end
 
   private
-    def set_reminder
-      @reminder = current_user.reminders.find(params[:id])
-    end
 
-    def reminder_params
-      params.require(:reminder).permit(:title, :description, :month_day, :month_direction, :time)
-    end
+  def set_reminder
+    @reminder = current_user.reminders.find(params[:id])
+  end
+
+  def reminder_params
+    params.require(:reminder).permit(:title, :description, :month_day, :month_direction, :time)
+  end
 end
