@@ -1,17 +1,30 @@
 class Reminder < ApplicationRecord
-
   belongs_to :user
 
-  validates_presence_of :title, :description, :month_day, :month_direction
+  validates_presence_of :title, :description, :month_day, :month_direction, :time
 
-  enum month_direction: [:start_of_month, :end_of_month]
+  enum month_direction: %i[start_of_month end_of_month]
 
-  def month_schedule_date
-    if month_direction == "start_of_month"
-      start_date_of_month + (month_day - 1).days
-    else
-      end_date_of_month.day - (month_day - 1).days
-    end
+  def scheduled?
+    Time.now > (scheduled_datetime - 30.minutes) && Time.now < scheduled_datetime
+  end
+
+  def month_schedule_day
+    start_of_month? ? month_day : Time.days_in_month(Date.today.month) - month_day
+  end
+
+  private
+
+  def scheduled_datetime
+    Time.new( schedule_date.year,
+              schedule_date.month,
+              schedule_date.day,
+              time.hour, time.min)
+  end
+
+  def schedule_date
+    diff_days = (month_day - 1).days
+    start_date_of_month + start_of_month? ? diff_days : (-1 * diff_days)
   end
 
   def start_date_of_month
@@ -20,20 +33,5 @@ class Reminder < ApplicationRecord
 
   def end_date_of_month
     Date.today.end_of_month
-  end
-
-  def scheduled?
-    t = time
-    d = month_schedule_date
-    new_time = Time.new(d.year, d.month, d.day, t.hour, t.min)
-    Time.now > (new_time - 30.minutes) && Time.now < new_time
-  end
-
-  def month_schedule_day
-    if month_direction == "start_of_month"
-      month_day
-    else
-      days_in_month(Date.today.month) - month_day
-    end
   end
 end
