@@ -5,8 +5,8 @@ class Reminder < ApplicationRecord
 
   enum month_direction: %i[start_of_month end_of_month]
 
-  def scheduled?
-    Time.now > (scheduled_datetime - 30.minutes) && Time.now < scheduled_datetime
+  def scheduled?(reminder_time)
+    reminder_time >= (scheduled_datetime - 30.minutes) && reminder_time <= scheduled_datetime
   end
 
   def month_schedule_day
@@ -24,7 +24,7 @@ class Reminder < ApplicationRecord
 
   def schedule_date
     diff_days = (month_day - 1).days
-    start_date_of_month + start_of_month? ? diff_days : (-1 * diff_days)
+    start_date_of_month + (start_of_month? ? diff_days : (-1 * diff_days))
   end
 
   def start_date_of_month

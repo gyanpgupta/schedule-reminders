@@ -66,4 +66,22 @@ RSpec.describe Reminder, type: :model do
       end
     end
   end
+
+  context 'should be scheduled? return truthy or falsy value' do
+    let(:reminder) { build(:reminder, month_day: 1, month_direction: 'start_of_month') }
+    let(:time1) { Time.new(2020, 1, 1, 0, 0) }
+    let(:time2) { Time.new(2020, 1, 1, 0, 30) }
+
+    it { expect(reminder.scheduled?(time1)).to be_truthy }
+    it { expect(reminder.scheduled?(time2)).to be_falsy }
+  end
+
+  context 'should be month_schedule_day return valid value' do
+    let(:reminder1) { build(:reminder, month_day: 1, month_direction: 'start_of_month') }
+    let(:reminder2) { build(:reminder, month_day: 1, month_direction: 'end_of_month') }
+
+    it { expect(reminder1.month_schedule_day).to eq 1 }
+    it { expect([28, 29 , 30 , 31]).to include(reminder2.month_schedule_day) }
+    it { expect(reminder2.month_schedule_day).to eq Time.days_in_month(Date.today.month) - 1 }
+  end
 end
